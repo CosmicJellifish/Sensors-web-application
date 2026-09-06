@@ -7,6 +7,10 @@ CLAUDE.md
 /node_modules
 /.pnp
 .pnp.*
+
+# this repo uses pnpm; a second lockfile confuses Vercel's package-manager detection
+package-lock.json
+yarn.lock
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
