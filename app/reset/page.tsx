@@ -14,13 +14,13 @@ const hammersmith = Hammersmith_One({
 });
 
 type FieldErrors = {
-  username?: string;
-  password?: string;
+  newPassword?: string;
+  confirmPassword?: string;
 };
 
-export default function LoginPage() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+export default function ResetPasswordPage() {
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "submitted">(
     "idle",
@@ -28,8 +28,12 @@ export default function LoginPage() {
 
   function validate(): FieldErrors {
     const next: FieldErrors = {};
-    if (!username.trim()) next.username = "Username is required.";
-    if (!password) next.password = "Password is required.";
+    if (!newPassword) next.newPassword = "New password is required.";
+    if (!confirmPassword) {
+      next.confirmPassword = "Please re-enter the new password.";
+    } else if (confirmPassword !== newPassword) {
+      next.confirmPassword = "Passwords do not match.";
+    }
     return next;
   }
 
@@ -65,81 +69,85 @@ export default function LoginPage() {
 
       <section className="w-[523px] max-w-full rounded-[25px] bg-[rgba(0,46,116,0.44)] px-[26px] pb-[67px]">
         <h2 className="py-[12px] text-center text-[36px] leading-[51px] text-white font-[family-name:var(--font-hammersmith)]">
-          Welcome Back
+          Enter a New Password
         </h2>
 
         <form onSubmit={handleSubmit} noValidate>
           <label
-            htmlFor="username"
+            htmlFor="new-password"
             className="mt-[36px] block text-[24px] leading-[20px] text-white"
           >
-            Username
+            New Password:
           </label>
           <input
-            id="username"
-            name="username"
-            type="text"
-            autoComplete="username"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-            aria-invalid={Boolean(errors.username)}
-            aria-describedby={errors.username ? "username-error" : undefined}
+            id="new-password"
+            name="new-password"
+            type="password"
+            autoComplete="new-password"
+            value={newPassword}
+            onChange={(event) => setNewPassword(event.target.value)}
+            aria-invalid={Boolean(errors.newPassword)}
+            aria-describedby={
+              errors.newPassword ? "new-password-error" : undefined
+            }
             className="mt-[19px] block h-[54px] w-full rounded-[15px] bg-[rgba(24,7,71,0.41)] px-[16px] text-[20px] text-white caret-white outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           />
-          {errors.username ? (
+          {errors.newPassword ? (
             <p
-              id="username-error"
+              id="new-password-error"
               role="alert"
               className="mt-[6px] text-[14px] text-[#ffd9d9]"
             >
-              {errors.username}
+              {errors.newPassword}
             </p>
           ) : null}
 
           <label
-            htmlFor="password"
+            htmlFor="confirm-password"
             className="mt-[78px] block text-[24px] leading-[20px] text-white"
           >
-            Password
+            Re-enter New Password
           </label>
           <input
-            id="password"
-            name="password"
+            id="confirm-password"
+            name="confirm-password"
             type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            aria-invalid={Boolean(errors.password)}
-            aria-describedby={errors.password ? "password-error" : undefined}
+            autoComplete="new-password"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+            aria-invalid={Boolean(errors.confirmPassword)}
+            aria-describedby={
+              errors.confirmPassword ? "confirm-password-error" : undefined
+            }
             className="mt-[21px] block h-[54px] w-full rounded-[15px] bg-[rgba(24,7,71,0.41)] px-[16px] text-[20px] text-white caret-white outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           />
-          {errors.password ? (
+          {errors.confirmPassword ? (
             <p
-              id="password-error"
+              id="confirm-password-error"
               role="alert"
               className="mt-[6px] text-[14px] text-[#ffd9d9]"
             >
-              {errors.password}
+              {errors.confirmPassword}
             </p>
           ) : null}
 
           <button
             type="submit"
             disabled={status === "submitting"}
-            className="mt-[43px] mx-auto block h-[51px] w-[260px] max-w-full rounded-[15px] bg-[#32428e] text-[24px] leading-[20px] text-white transition-colors hover:bg-[#3a4ca6] focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:outline-none disabled:opacity-70"
+            className="mt-[34px] mx-auto block h-[51px] w-[260px] max-w-full rounded-[15px] bg-[#32428e] text-[24px] leading-[20px] text-white transition-colors hover:bg-[#3a4ca6] focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:outline-none disabled:opacity-70"
           >
-            {status === "submitting" ? "Signing In…" : "Sign In"}
+            {status === "submitting" ? "Resetting…" : "Reset Password"}
           </button>
 
           <Link
-            href="/reset"
+            href="/login"
             className="mt-[28px] block h-[20px] w-full rounded text-center text-[24px] leading-[20px] text-white underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:outline-none"
           >
-            Reset Password
+            Back to Login
           </Link>
 
           <p aria-live="polite" className="sr-only">
-            {status === "submitted" ? "Signed in." : ""}
+            {status === "submitted" ? "Password reset." : ""}
           </p>
         </form>
       </section>
