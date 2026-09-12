@@ -1,18 +1,12 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { useTransition } from "react";
-
 import type {
   DisplayMeasurement,
   MeasurementId,
 } from "../../_lib/measurements";
 import type { Session } from "../../_lib/readings";
-import {
-  type ExportFilter,
-  type ExportFormat,
-  toSearchParams,
-} from "../_lib/export-filter";
+import type { ExportFormat } from "../_lib/export-filter";
+import { useExportFilter } from "./export-filter-provider";
 
 // Figma renders these as native browser controls, so they are reproduced as
 // real inputs and tinted with accent-color rather than rebuilt from the
@@ -26,37 +20,20 @@ const dateClass =
 const labelClass = "text-[12px] leading-[16px] font-medium text-ink-muted";
 
 /**
- * Every control writes straight to the query string; nothing is mirrored in
- * local state. That is what lets the preview table and the download link — both
- * rendered on the server, outside this component — see the same filter.
- *
- * `replace` rather than `push` so tweaking a checkbox does not fill the back
- * stack, and the transition keeps the old table on screen while the server
- * re-renders instead of blanking it.
+ * Every control writes straight to the shared filter, which writes straight to
+ * the query string; nothing is mirrored in local state here. That is what lets
+ * the preview table and the download link — neither of them inside this
+ * component — see the same filter.
  */
 export function ExportParametersForm({
-  filter,
   sessions,
   measurements,
 }: {
-  filter: ExportFilter;
   sessions: Session[];
   /** In display units, so the checkbox labels match the preview headings. */
   measurements: DisplayMeasurement[];
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const [isPending, startTransition] = useTransition();
-
-  function apply(change: Partial<ExportFilter>) {
-    const params = toSearchParams({ ...filter, ...change });
-    const query = params.toString();
-    startTransition(() => {
-      router.replace(query ? `${pathname}?${query}` : pathname, {
-        scroll: false,
-      });
-    });
-  }
+  const { filter, apply, isPending } = useExportFilter();
 
   function toggleVariable(id: MeasurementId, checked: boolean) {
     apply({
