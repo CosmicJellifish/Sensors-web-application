@@ -10,6 +10,27 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Dashboard palette, lifted from the Humidity Sensor Figma file. The design
+     has no Figma variables, so these names are ours; the hex values are the
+     design's. */
+  --color-canvas: #f9f9ff;
+  --color-panel: #f0f3ff;
+  --color-chip: #e7eefe;
+  --color-hairline: #bbcabf;
+  --color-ink: #151c27;
+  --color-ink-muted: #3c4a42;
+  --color-ink-subtle: #6c7a71;
+  --color-accent: #006c49;
+  --color-emerald: #10b981;
+  --color-amber: #fea619;
+  --color-caution: #855300;
+  --color-danger: #ba1a1a;
+  --color-nav-from: #2757d2;
+  --color-nav-to: #abc1f8;
+  --color-nav-active: #272eb2;
+  --color-logout: #941313;
+  --color-track: #dce2f3;
 }
 
 @media (prefers-color-scheme: dark) {

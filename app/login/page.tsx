@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Hammersmith_One, Inter } from "next/font/google";
 
 // Fonts come from the Figma design (Inter for body, Hammersmith One for the
@@ -130,13 +131,12 @@ export default function LoginPage() {
             {status === "submitting" ? "Signing In…" : "Sign In"}
           </button>
 
-          <button
-            type="button"
-            onClick={() => setStatus("idle")}
+          <Link
+            href="/reset"
             className="mt-[28px] block h-[20px] w-full rounded text-center text-[24px] leading-[20px] text-white underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:outline-none"
           >
             Reset Password
-          </button>
+          </Link>
 
           <p aria-live="polite" className="sr-only">
             {status === "submitted" ? "Signed in." : ""}
